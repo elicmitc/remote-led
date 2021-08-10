@@ -16,6 +16,7 @@ const char* password = "12345678";
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 String response;
 int r, g, b;
+int clicks = 0;
 // end of led info 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);     // Initialize the LED_BUILTIN pin as an output
@@ -61,7 +62,7 @@ void loop() {
     }
   }
   else{ 
-    
+    // add button part 
     if(WiFi.status() != WL_CONNECTED){ // if not connected to wifi
       ESP.restart(); // restart 
     }

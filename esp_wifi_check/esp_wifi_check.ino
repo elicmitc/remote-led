@@ -1,6 +1,6 @@
 #include "ESP8266WiFi.h"
 #include <Adafruit_NeoPixel.h>
-
+int change_strip(int red, int green, int blue);
 // server address and port 
 WiFiClient client;
 const IPAddress server(10,0,0,194);
@@ -20,7 +20,7 @@ int clicks = 0;
 // end of led info 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);     // Initialize the LED_BUILTIN pin as an output
-  pinMode(BUTTON_PIN, INPUT);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
   // put your setup code here, to run once:
   Serial.begin(115200);
   WiFi.begin(ssid, password);
@@ -40,10 +40,11 @@ void setup() {
 void loop() { 
   // Send message
 //  String response;
+  int return_val; 
   if (client.connect(server,httpPort) && client){ // tries to connect to server
     digitalWrite(LED_BUILTIN, LOW); // led on when connected to server 
     Serial.println("Client Connected to Server.");
-    client.print("What Color?");    // send message to server
+    //client.print("What Color?");    // send message to server
     response = client.readString(); // store received msg in 'response'
     //Serial.println(response);
     const char* input = response.c_str(); // input needs to be const char* for sscanf
@@ -63,14 +64,45 @@ void loop() {
   }
   else{ 
     // add button part 
+    if(digitalRead(BUTTON_PIN) == LOW){
+      clicks += 1;
+      clicks = clicks % 4;
+      Serial.print("button pressed! ");
+      Serial.println(clicks);
+      if(clicks == 0){
+        return_val = change_strip(r,g,b);
+      }
+      if(clicks == 1){ // blue
+        return_val = change_strip(0,0,200);
+      }
+      if(clicks == 2){ // blue
+        return_val = change_strip(0,200,0);
+      }      
+      if(clicks == 3){ // blue
+        return_val = change_strip(200,0,0);
+      }
+      delay(300);
+    }
     if(WiFi.status() != WL_CONNECTED){ // if not connected to wifi
       ESP.restart(); // restart 
     }
   }
 }
-void blue(){
+int change_strip(int red, int green, int blue){
+  delay(300); // needed in case button is held down too long when function starts
   for(int i=0;i<LED_COUNT;i++){
-    strip.setPixelColor(i, strip.Color(0, 0, 200));
+    if(digitalRead(BUTTON_PIN) == LOW){
+      return 0;
+    }
+    strip.setPixelColor(i, strip.Color(red, green, blue));
+    strip.show();
+    delay(10);
+  }    
+  return 1;
+}
+void rainbow(int red, int green, int blue){
+  for(int i=0;i<LED_COUNT;i++){
+    strip.setPixelColor(i, strip.Color(red, green, blue));
     strip.show();
     delay(10);
   }    

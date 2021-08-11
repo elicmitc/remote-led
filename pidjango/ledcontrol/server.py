@@ -22,6 +22,7 @@ def tcp_color_server(Host,Port, Color):
 			       + str(address[0]) +"\', " \
 			       + str(port)+")")
             client_n = client_n + 1 # increase for next client
+        conn.send(Color.encode())  # send data to the client
         data = conn.recv(256).decode() #get message from client
         print("color server: got message from (\'" + str(address[0])+"\', "+str(port)+f"): \"{data}\"")
         #print(f'raw data: {data}')

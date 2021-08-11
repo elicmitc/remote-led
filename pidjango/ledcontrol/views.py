@@ -7,7 +7,7 @@ from threading import Thread
 
 def killproc():
     print("---------------------- Process Information --------------------");
-    for lines in os.popen('ps ax | grep /home/pi/Desktop/pidjango/ledcontrol/server.py'):
+    for lines in os.popen('ps ax | grep /home/pi/Desktop/Led-Server/pidjango/ledcontrol/server.py'):
         fields = lines.split('\n')
         for line in fields:
             pid_str = line.split(' pts/',1)
@@ -26,7 +26,7 @@ def index(request):
 def rgb(request, r, g, b):
     color = f"\"{r} {g} {b}\""
     statement = f"You're color is {r} {g} {b}"
-    output = "sudo python3 /home/pi/Desktop/pidjango/ledcontrol/server.py " + color
+    output = "sudo python3 /home/pi/Desktop/Led-Server/pidjango/ledcontrol/server.py " + color
     killproc()
     startcolor(output)
     return HttpResponse(statement)

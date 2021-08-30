@@ -113,7 +113,7 @@ int change_strip(int red, int green, int blue){
       Serial.println("button pressed");
       return 0;
     }
-    strip2.setPixelColor(i, strip.Color(red, green, blue));
+    strip2.setPixelColor(i, strip2.Color(red, green, blue));
     strip2.show();
     delay(10);
   }      

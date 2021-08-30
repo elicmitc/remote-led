@@ -13,9 +13,12 @@ const char* password = "12345678";
 // led info
 #define BUTTON_PIN  5
 #define LED_PIN     4
-#define LED_COUNT  750//600 // 150 * 5
+#define LED_PIN     9
+#define LED_COUNT  300 // 2 strips 
+#define LED_COUNT2 450 // 3 strips 
 #define BRIGHTNESS 150 // 0-255
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip2(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 String response;
 int r, g, b;
 int clicks = 0;
@@ -51,7 +54,7 @@ void loop() {
     //Serial.println(response);
     const char* input = response.c_str(); // input needs to be const char* for sscanf
     // terminate signal
-    client.print("exit");
+    //client.print("exit");
     digitalWrite(LED_BUILTIN, HIGH); // led off 
     // flood leds with new color
     Serial.println("input: ");Serial.println(input);
@@ -105,5 +108,14 @@ int change_strip(int red, int green, int blue){
     strip.show();
     delay(10);
   }    
+  for(int i=(LED_COUNT2-1);i>-1;i--){
+    if(digitalRead(BUTTON_PIN) == LOW){
+      Serial.println("button pressed");
+      return 0;
+    }
+    strip2.setPixelColor(i, strip.Color(red, green, blue));
+    strip2.show();
+    delay(10);
+  }      
   return 1;
 }

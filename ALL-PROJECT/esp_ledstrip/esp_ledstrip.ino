@@ -11,14 +11,14 @@ const int httpPort = 12345;
 const char* ssid = "Panic In DC    <(O.O)>";
 const char* password = "12345678";
 // led info
-#define BUTTON_PIN  5
+#define BUTTON_PIN  14
 #define LED_PIN     4
-#define LED_PIN     9
+#define LED_PIN2    5
 #define LED_COUNT  300 // 2 strips 
 #define LED_COUNT2 450 // 3 strips 
 #define BRIGHTNESS 150 // 0-255
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel strip2(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip2(LED_COUNT, LED_PIN2, NEO_GRB + NEO_KHZ800);
 String response;
 int r, g, b;
 int clicks = 0;
@@ -39,6 +39,9 @@ void setup() {
   strip.begin(); // mandatory 
   strip.clear(); // clear all leds
   strip.setBrightness(BRIGHTNESS);
+  strip2.begin(); // mandatory 
+  strip2.clear(); // clear all leds
+  strip2.setBrightness(BRIGHTNESS);
   digitalWrite(LED_BUILTIN, HIGH); // led off 
 }
 
@@ -108,7 +111,7 @@ int change_strip(int red, int green, int blue){
     strip.show();
     delay(10);
   }    
-  for(int i=(LED_COUNT2-1);i>-1;i--){
+  for(int i=(450-1);i>-1;i--){
     if(digitalRead(BUTTON_PIN) == LOW){
       Serial.println("button pressed");
       return 0;
